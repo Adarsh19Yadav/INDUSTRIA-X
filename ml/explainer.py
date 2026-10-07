@@ -71,7 +71,7 @@ from ml.inference import _ModelCache
 # Constants
 # ---------------------------------------------------------------------------
 
-_DEFAULT_ARTIFACTS_DIR = Path("ml/artifacts/v1")
+_DEFAULT_ARTIFACTS_DIR = Path(__file__).parent / "artifacts" / "v1"
 _VALID_TYPES: frozenset[str] = frozenset({"L", "M", "H"})
 
 #: Number of training-sample rows used for global SHAP importance.

@@ -76,7 +76,7 @@ from ml.data.features import CATEGORICAL_FEATURES, FEATURE_COLUMNS, NUMERICAL_FE
 # Default artifact directory
 # ---------------------------------------------------------------------------
 
-_DEFAULT_ARTIFACTS_DIR = Path("ml/artifacts/v1")
+_DEFAULT_ARTIFACTS_DIR = Path(__file__).parent / "artifacts" / "v1"
 
 # ---------------------------------------------------------------------------
 # Valid categories
