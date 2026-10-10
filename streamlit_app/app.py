@@ -358,6 +358,19 @@ elif page == "🖥️ Machines":
 # MACHINE DETAIL
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == "🔬 Machine Detail":
+    st.markdown("""
+        <style>
+        div[data-testid="stMetricValue"] {
+        font-size: clamp(1.1rem, 1.4vw, 1.6rem);
+            overflow-wrap: anywhere;
+        }
+
+        div[data-testid="stMetricLabel"] {
+            font-size: 0.8rem;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
     st.title("🔬 Machine Detail")
     machines = db_machines()
     if not machines: st.info("No machines registered."); st.stop()
@@ -373,22 +386,29 @@ elif page == "🔬 Machine Detail":
 
     st.subheader(f"🖥️ {machine['machine_identifier']}")
     st.caption(f"Type: {machine['type'] or 'Unspecified'}")
-    c1,c2,c3,c4 = st.columns(4)
-    c1.metric("ID",         f"#{machine['id']}")
+    c1, c2, c3, c4 = st.columns([0.7, 1.1, 1.3, 1.3], gap="small")
+    
+    c1.metric("ID", f"#{machine['id']}")
     c2.metric("Identifier", machine["machine_identifier"])
     c3.metric("Registered", fts(machine["created_at"]))
-    c4.metric("Updated",    fts(machine["updated_at"]))
+    c4.metric("Updated", fts(machine["updated_at"]))
 
     st.divider()
     st.subheader("Current Risk")
     if latest:
-        r1,r2,r3,r4,r5 = st.columns(5)
+        r1, r2, r3, r4, r5 = st.columns(
+            [1.0, 1.0, 1.15, 1.15, 1.3],
+            gap="small"
+        )        
         rc = RISK_COLOR.get(latest["risk_level"],"#6b7280")
         r1.markdown(f'<div style="text-align:center"><p style="font-size:11px;color:#888;margin-bottom:4px">RISK LEVEL</p><span style="background:{rc};color:white;padding:4px 12px;border-radius:6px;font-weight:700">{latest["risk_level"]}</span></div>', unsafe_allow_html=True)
-        r2.metric("Risk Score",    fs(latest["risk_score"]))
-        r3.metric("P(Failure)",    fp(latest["failure_probability"]))
+        r2.metric("Risk Score", fs(latest["risk_score"]))
+        r3.metric("P(Failure)", fp(latest["failure_probability"]))
         r4.metric("Anomaly Score", fs(latest["anomaly_score"]))
-        r5.metric("Anomaly",       "⚠️ Anomalous" if latest["anomaly_score"]>0 else "✅ Normal")
+        r5.metric(
+            "Anomaly",
+            "⚠️ Anomalous" if latest["anomaly_score"] > 0 else "✅ Normal"
+        )
         st.caption(f"Latest: {fts(latest['created_at'])} · Model: {latest['model_version']}")
     else:
         st.info("No assessment yet. Use the form below.")
